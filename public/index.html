@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#070B14">
+<title>Property Reports | FFR &amp; 52</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#070B14;--bg2:#0D1220;--bg3:#111827;
+  --gl:rgba(255,255,255,0.025);--gl2:rgba(255,255,255,0.05);--gl3:rgba(255,255,255,0.075);
+  --bd:rgba(255,255,255,0.06);--bd2:rgba(255,255,255,0.12);--bd3:rgba(99,179,255,0.4);
+  --t1:#EFF4F8;--t2:#8B9AB5;--t3:#4F5D73;--t4:#333D4F;
+  --ac:#63B3FF;--acd:rgba(99,179,255,0.12);
+  --gn:#34D399;--gnd:rgba(52,211,153,0.12);
+  --am:#FBBF24;--amd:rgba(251,191,36,0.12);
+  --rd:#F87171;--rdd:rgba(248,113,113,0.12);
+  --pu:#A78BFA;--pud:rgba(167,139,250,0.12);
+  --f:'Outfit',system-ui,sans-serif;--m:'JetBrains Mono',monospace;
+  --r:14px;--rs:7px;--e:cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--bg);color:var(--t1);min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+
+/* Ambient background */
+.bga{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(120px);animation:of 25s ease-in-out infinite alternate}
+.orb:nth-child(1){width:600px;height:600px;top:-15%;left:-10%;background:rgba(99,179,255,.06)}
+.orb:nth-child(2){width:500px;height:500px;bottom:-10%;right:-10%;background:rgba(167,139,250,.04);animation-delay:-12s}
+.orb:nth-child(3){width:400px;height:400px;top:50%;left:40%;background:rgba(52,211,153,.03);animation-delay:-8s}
+@keyframes of{to{transform:translate(40px,-30px) scale(1.1)}}
+
+/* Layout */
+.app{display:flex;min-height:100vh;min-height:100dvh;position:relative;z-index:1}
+
+/* Sidebar */
+.sb{width:260px;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;padding:20px 14px;background:rgba(13,18,32,.85);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);border-right:1px solid var(--bd);z-index:100;transition:transform .35s var(--e)}
+.sb-hd{display:flex;align-items:center;gap:12px;padding:4px 6px 20px;border-bottom:1px solid var(--bd);margin-bottom:12px}
+.sb-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--pu));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+.sb-br h2{font-size:14px;font-weight:700;letter-spacing:-.3px}
+.sb-br span{font-size:11px;color:var(--t3)}
+.nl{font-size:9.5px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;padding:18px 10px 6px}
+.nb{display:flex;align-items:center;gap:11px;width:100%;padding:9px 11px;border:none;border-radius:10px;background:transparent;color:var(--t2);font:500 13px/1 var(--f);cursor:pointer;transition:all .2s var(--e);text-align:left;position:relative}
+.nb:hover{background:var(--gl2);color:var(--t1)}
+.nb.on{background:var(--acd);color:var(--ac)}
+.nb.on::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:18px;border-radius:0 3px 3px 0;background:var(--ac)}
+.nb svg{width:18px;height:18px;flex-shrink:0;stroke-width:1.8}
+.sp{flex:1}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;background:var(--gl);border:1px solid var(--bd)}
+.sb-av{width:32px;height:32px;border-radius:var(--rs);background:linear-gradient(135deg,var(--ac),var(--gn));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+.sb-ui{min-width:0}
+.sb-ui strong{display:block;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-ui span{display:block;font-size:10px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Main content */
+.mc{flex:1;margin-left:260px;padding:28px 32px 40px;min-height:100vh;transition:margin-left .35s var(--e)}
+
+/* Mobile */
+.mbar{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(13,18,32,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--bd);padding:6px 8px calc(env(safe-area-inset-bottom,6px) + 6px);z-index:200}
+.mbar-in{display:flex;justify-content:space-around}
+.mb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 14px;border:none;background:none;color:var(--t3);font:500 9.5px/1 var(--f);cursor:pointer;border-radius:var(--rs)}
+.mb svg{width:20px;height:20px;stroke-width:1.8}
+.mb.on{color:var(--ac)}
+.mh{display:none;position:fixed;top:14px;left:14px;z-index:300;width:40px;height:40px;border-radius:10px;border:1px solid var(--bd);background:rgba(13,18,32,.9);backdrop-filter:blur(12px);color:var(--t1);cursor:pointer;justify-content:center;align-items:center}
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;backdrop-filter:blur(4px)}
+.mov.sh{display:block}
+@media(max-width:768px){
+  .sb{transform:translateX(-100%);width:280px}
+  .sb.op{transform:translateX(0)}
+  .mc{margin-left:0;padding:60px 16px 100px}
+  .mbar{display:block}
+  .mh{display:flex}
+}
+
+/* Page header */
+.ph{margin-bottom:28px}
+.ph h1{font-size:26px;font-weight:800;letter-spacing:-.8px;line-height:1.2}
+.ph p{color:var(--t3);font-size:13px;margin-top:4px}
+
+/* Cards */
+.cd{background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:var(--r);padding:22px;backdrop-filter:blur(8px);transition:border-color .3s}
+.cd:hover{border-color:var(--bd2)}
+.cd+.cd{margin-top:16px}
+.ct{font-size:13px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.ct svg{width:18px;height:18px;color:var(--ac);stroke-width:1.8}
+
+/* Stats */
+.sr{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.sc{padding:20px;border-radius:var(--r);background:rgba(255,255,255,.03);border:1px solid var(--bd);position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent);opacity:.5}
+.sc .v{font:800 28px/1 var(--m);letter-spacing:-1px}
+.sc .l{font-size:10.5px;color:var(--t3);margin-top:6px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+
+/* Forms */
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:10.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
+.fi,.fs,.ft{width:100%;padding:10px 13px;border-radius:var(--rs);border:1px solid var(--bd);background:rgba(255,255,255,.02);color:var(--t1);font:400 13.5px/1.4 var(--f);outline:none;transition:border-color .2s,box-shadow .2s}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--bd3);box-shadow:0 0 0 3px rgba(99,179,255,.1)}
+.fi::placeholder,.ft::placeholder{color:var(--t4)}
+.ft{resize:vertical;min-height:72px;line-height:1.5}
+.fs{cursor:pointer;appearance:none;padding-right:36px}
+.fs option{background:var(--bg3);color:var(--t1)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.fr{grid-template-columns:1fr}}
+
+/* Traffic lights */
+.tr{display:flex;gap:8px}
+.to{flex:1;padding:14px 8px;border-radius:10px;border:1.5px solid var(--bd);background:transparent;cursor:pointer;text-align:center;transition:all .25s var(--e);font:600 11px/1 var(--f);color:var(--t3)}
+.to .dt{width:22px;height:22px;border-radius:50%;margin:0 auto 7px;transition:all .25s;opacity:.5}
+.to[data-v=green] .dt{background:var(--gn)}
+.to[data-v=amber] .dt{background:var(--am)}
+.to[data-v=red] .dt{background:var(--rd)}
+.to.s .dt{opacity:1;transform:scale(1.15)}
+.to[data-v=green].s{border-color:var(--gn);background:var(--gnd);color:var(--gn)}
+.to[data-v=amber].s{border-color:var(--am);background:var(--amd);color:var(--am)}
+.to[data-v=red].s{border-color:var(--rd);background:var(--rdd);color:var(--rd)}
+
+/* Toggles */
+.tgr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--bd)}
+.tgr:last-child{border:none}
+.tgr label{font-size:13px;cursor:pointer}
+.tg{position:relative;width:42px;height:24px;display:inline-block;flex-shrink:0}
+.tg input{opacity:0;width:0;height:0;position:absolute}
+.tg-t{position:absolute;inset:0;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--bd);transition:all .25s;cursor:pointer}
+.tg-k{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:9px;background:var(--t3);transition:all .25s;pointer-events:none}
+.tg input:checked~.tg-t{background:var(--gnd);border-color:var(--gn)}
+.tg input:checked~.tg-k{left:21px;background:var(--gn)}
+
+/* Sliders */
+.sw{margin-bottom:18px}
+.sw-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.sw-v{font:700 20px/1 var(--m);color:var(--ac)}
+input[type=range]{-webkit-appearance:none;width:100%;height:5px;border-radius:3px;background:var(--gl3);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:10px;background:var(--ac);border:3px solid var(--bg);box-shadow:0 0 10px rgba(99,179,255,.3);cursor:grab}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:10px;background:var(--ac);border:3px solid var(--bg)}
+
+/* Buttons */
+.bt{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--rs);border:none;font:600 12.5px/1 var(--f);cursor:pointer;transition:all .2s var(--e);white-space:nowrap}
+.bt svg{width:15px;height:15px;stroke-width:2}
+.bp{background:linear-gradient(135deg,#63B3FF,#4F8EDB);color:#fff;box-shadow:0 2px 12px rgba(99,179,255,.25)}
+.bp:hover{box-shadow:0 4px 20px rgba(99,179,255,.35);transform:translateY(-1px)}
+.bg_{background:var(--gl);color:var(--t2);border:1px solid var(--bd)}
+.bg_:hover{background:var(--gl2);color:var(--t1);border-color:var(--bd2)}
+.bsu{background:linear-gradient(135deg,var(--gn),#2AB385);color:#fff}
+.bda{background:var(--rdd);color:var(--rd)}
+.bda:hover{background:rgba(248,113,113,.2)}
+.bsm{padding:6px 11px;font-size:11px}
+.blg{padding:13px 26px;font-size:14px}
+.bic{width:34px;height:34px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--rs)}
+
+/* Goal buttons */
+.gbs{display:flex;gap:8px;margin-top:8px}
+.gb{flex:1;padding:11px;border-radius:var(--rs);border:1.5px solid var(--bd);background:transparent;cursor:pointer;text-align:center;font:600 12px/1 var(--f);color:var(--t3);transition:all .25s}
+.gb.y.s{border-color:var(--gn);background:var(--gnd);color:var(--gn)}
+.gb.n.s{border-color:var(--rd);background:var(--rdd);color:var(--rd)}
+
+/* Cost rows */
+.cro{display:grid;grid-template-columns:100px 1fr 1.2fr 95px 34px;gap:7px;align-items:center;padding:8px 10px;border-radius:var(--rs);background:var(--gl);border:1px solid var(--bd);margin-bottom:7px;animation:cs .3s ease}
+@keyframes cs{from{opacity:0;transform:translateY(-6px)}}
+.cro .fi,.cro .fs{padding:7px 9px;font-size:12px}
+@media(max-width:640px){.cro{grid-template-columns:1fr 1fr;gap:6px}.cro>:nth-child(3){grid-column:1/-1}}
+.csm{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:10px;background:var(--acd);border:1px solid rgba(99,179,255,.15);margin-top:12px}
+.csm .ca{font:700 22px/1 var(--m);color:var(--ac);letter-spacing:-.5px}
+.csm .cl{font:600 12px/1 var(--f);color:var(--t2)}
+
+/* Steps bar */
+.stb{display:flex;gap:3px;margin-bottom:24px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.stp{flex:1;min-width:70px;padding:10px 6px;text-align:center;font:500 11px/1 var(--f);color:var(--t4);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2.5px solid var(--bd);transition:all .2s}
+.stp.a{color:var(--ac);border-color:var(--ac)}
+.stp.d{color:var(--gn);border-color:var(--gn)}
+
+/* Report cards */
+.rca{padding:18px 20px;border-radius:var(--r);background:rgba(255,255,255,.03);border:1px solid var(--bd);cursor:pointer;transition:all .3s var(--e);margin-bottom:10px}
+.rca:hover{border-color:var(--bd2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.rca-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.rca-d{font:600 15px/1 var(--f)}
+.rb_{padding:3px 9px;border-radius:20px;font:600 9.5px/1 var(--f);text-transform:uppercase;letter-spacing:.5px}
+.rb_.m{background:var(--pud);color:var(--pu)}
+.rb_.w{background:var(--acd);color:var(--ac)}
+.rca-m{color:var(--t3);font-size:12px;display:flex;gap:14px}
+.sds{display:flex;gap:5px;margin-top:10px}
+.sd_{width:9px;height:9px;border-radius:50%}
+.sd_.green{background:var(--gn)}.sd_.amber{background:var(--am)}.sd_.red{background:var(--rd)}
+
+/* AI box */
+.aib{padding:20px;border-radius:var(--r);margin-top:16px;background:linear-gradient(135deg,rgba(99,179,255,.05),rgba(167,139,250,.05));border:1px solid rgba(99,179,255,.12);white-space:pre-line;line-height:1.7;font-size:13px}
+.aic{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:var(--pud);color:var(--pu);font:600 10px/1 var(--f);margin-bottom:10px}
+
+/* Monthly */
+.mw{margin-top:20px;padding:22px;border-radius:var(--r);background:linear-gradient(135deg,rgba(167,139,250,.06),rgba(99,179,255,.03));border:1px solid rgba(167,139,250,.15)}
+
+/* Team */
+.tgd{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.tc{padding:22px;border-radius:var(--r);background:rgba(255,255,255,.03);border:1px solid var(--bd);transition:border-color .3s}
+.tc:hover{border-color:var(--bd2)}
+.tc-h{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.tc-a{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font:700 17px/1 var(--f);color:#fff;flex-shrink:0}
+.tc-i strong{font-size:15px;font-weight:700;display:block}
+.tc-i span{font-size:11.5px;color:var(--t3)}
+
+/* Loading/toast */
+.lo{position:fixed;inset:0;z-index:1000;background:rgba(7,11,20,.92);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.lo.off{display:none}
+.lds{width:44px;height:44px;position:relative}
+.lds div{width:36px;height:36px;margin:4px;border:3px solid transparent;border-top-color:var(--ac);border-radius:50%;animation:ldsp .9s linear infinite;position:absolute}
+@keyframes ldsp{to{transform:rotate(360deg)}}
+.lds-t{font:500 13px/1 var(--f);color:var(--t2)}
+.tst{position:fixed;bottom:90px;right:20px;padding:12px 18px;border-radius:10px;font:600 12.5px/1 var(--f);color:#fff;z-index:500;backdrop-filter:blur(12px);transform:translateY(16px);opacity:0;transition:all .3s;pointer-events:none;max-width:340px}
+.tst.ok{background:rgba(52,211,153,.9)}.tst.er{background:rgba(248,113,113,.9)}.tst.vi{transform:translateY(0);opacity:1}
+
+/* Pages */
+.pg{display:none}.pg.on{display:block;animation:pi .35s ease}
+.rs{display:none}.rs.on{display:block;animation:pi .3s ease}
+@keyframes pi{from{opacity:0;transform:translateY(8px)}}
+.dv{height:1px;background:var(--bd);margin:20px 0}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="bga"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+<div class="lo off" id="lo"><div class="lds"><div></div></div><div class="lds-t" id="loT">Loading...</div></div>
+<div class="tst" id="tst"></div>
+<div class="mov" id="mov" onclick="csb()"></div>
+<button class="mh" onclick="tsb()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+
+<!-- SIDEBAR -->
+<div class="sb" id="sb">
+  <div class="sb-hd"><div class="sb-logo">52</div><div class="sb-br"><h2>Property Reports</h2><span>FFR &amp; 52 Old Elvet</span></div></div>
+  <div class="nl">Main</div>
+  <button class="nb on" data-p="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</button>
+  <button class="nb" data-p="submit" onclick="go('submit')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>Submit Report</button>
+  <button class="nb" data-p="history" onclick="go('history')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>History</button>
+  <div class="nl">Team</div>
+  <button class="nb" data-p="team" onclick="go('team')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Team</button>
+  <div class="sp"></div>
+  <div class="sb-u"><div class="sb-av" id="uA">?</div><div class="sb-ui"><strong id="uN">Select User</strong><span id="uE">Go to Team tab</span></div></div>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mbar"><div class="mbar-in">
+  <button class="mb on" data-p="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Home</button>
+  <button class="mb" data-p="submit" onclick="go('submit')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>Submit</button>
+  <button class="mb" data-p="history" onclick="go('history')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>History</button>
+  <button class="mb" data-p="team" onclick="go('team')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Team</button>
+</div></div>
+
+<div class="app"><div class="mc" id="main">
+
+<!-- DASHBOARD -->
+<div class="pg on" id="pg-dashboard">
+  <div class="ph"><h1>Dashboard</h1><p>Property reporting overview</p></div>
+  <div class="sr">
+    <div class="sc"><div class="v" id="dR">0</div><div class="l">Total Reports</div></div>
+    <div class="sc"><div class="v" id="dM">£0</div><div class="l">Maintenance MTD</div></div>
+    <div class="sc"><div class="v" id="dO">£0</div><div class="l">Operational MTD</div></div>
+    <div class="sc"><div class="v" id="dS">—</div><div class="l">Latest Status</div></div>
+  </div>
+  <div class="cd"><div class="ct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Latest Report</div><p style="color:var(--t3);font-size:13px" id="dL">No reports yet — submit your first weekly report.</p></div>
+  <div style="margin-top:20px"><button class="bt bp blg" onclick="go('submit')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>Submit This Week's Report</button></div>
+</div>
+
+<!-- SUBMIT REPORT -->
+<div class="pg" id="pg-submit">
+  <div class="ph"><h1>Submit Weekly Report</h1><p id="subSub">Complete each section below</p></div>
+  <div class="stb" id="stb">
+    <button class="stp a" data-s="0" onclick="toS(0)">Status</button>
+    <button class="stp" data-s="1" onclick="toS(1)">Goals</button>
+    <button class="stp" data-s="2" onclick="toS(2)">Costs</button>
+    <button class="stp" data-s="3" onclick="toS(3)">Tenant</button>
+    <button class="stp" data-s="4" onclick="toS(4)">Compliance</button>
+    <button class="stp" data-s="5" onclick="toS(5)">Issues</button>
+    <button class="stp" data-s="6" onclick="toS(6)">Review</button>
+  </div>
+
+  <!-- S0: STATUS -->
+  <div class="rs on" id="s0">
+    <div class="cd"><div class="ct">Report Details</div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Week Ending</label><input type="date" class="fi" id="fWE"></div>
+        <div class="fg"><label class="fl">Submitted By</label><select class="fs" id="fWho"><option value="">Select team member</option><option value="Andy">Andy</option><option value="Akiel">Akiel</option><option value="Hannah">Hannah</option></select></div>
+      </div>
+      <div id="mBan" style="display:none;padding:12px 14px;border-radius:var(--rs);background:var(--pud);border:1px solid rgba(167,139,250,.2);margin-bottom:14px"><strong style="color:var(--pu);font-size:12px">Monthly Report Enabled</strong><p style="font-size:11px;color:var(--t2);margin-top:3px">Last Friday of the month — additional sections unlocked.</p></div>
+    </div>
+    <div class="cd"><div class="ct">Traffic Light Status</div>
+      <div class="fg"><label class="fl">52 Old Elvet</label><div class="tr" data-f="status_52"><button class="to s" data-v="green" onclick="pT(this)"><div class="dt"></div>On Track</button><button class="to" data-v="amber" onclick="pT(this)"><div class="dt"></div>Attention</button><button class="to" data-v="red" onclick="pT(this)"><div class="dt"></div>Action Needed</button></div></div>
+      <div class="fg"><label class="fl">FFR Group</label><div class="tr" data-f="status_ffr"><button class="to s" data-v="green" onclick="pT(this)"><div class="dt"></div>On Track</button><button class="to" data-v="amber" onclick="pT(this)"><div class="dt"></div>Attention</button><button class="to" data-v="red" onclick="pT(this)"><div class="dt"></div>Action Needed</button></div></div>
+      <div class="fg"><label class="fl">Cash Position</label><div class="tr" data-f="status_cash"><button class="to s" data-v="green" onclick="pT(this)"><div class="dt"></div>On Track</button><button class="to" data-v="amber" onclick="pT(this)"><div class="dt"></div>Attention</button><button class="to" data-v="red" onclick="pT(this)"><div class="dt"></div>Action Needed</button></div></div>
+    </div>
+    <div style="margin-top:16px;display:flex;justify-content:flex-end"><button class="bt bp" onclick="nS()">Next →</button></div>
+  </div>
+
+  <!-- S1: GOALS -->
+  <div class="rs" id="s1">
+    <div class="cd"><div class="ct">Last Week's Goals</div>
+      <p style="color:var(--t3);font-size:12px;margin-bottom:14px">Auto-populated from last report</p>
+      <div class="fg"><label class="fl">Primary Goal</label><div class="fi" id="pPG" style="background:rgba(255,255,255,.015);min-height:40px;display:flex;align-items:center;color:var(--t2)">Loading…</div><div class="gbs"><button class="gb y" onclick="pG(this,'ppA',true)">Achieved</button><button class="gb n" onclick="pG(this,'ppA',false)">Missed</button></div><textarea class="ft" id="ppN" placeholder="Notes (optional)" style="margin-top:8px;min-height:48px"></textarea></div>
+      <div class="fg"><label class="fl">Secondary Goal</label><div class="fi" id="pSG" style="background:rgba(255,255,255,.015);min-height:40px;display:flex;align-items:center;color:var(--t2)">Loading…</div><div class="gbs"><button class="gb y" onclick="pG(this,'psA',true)">Achieved</button><button class="gb n" onclick="pG(this,'psA',false)">Missed</button></div><textarea class="ft" id="psN" placeholder="Notes (optional)" style="margin-top:8px;min-height:48px"></textarea></div>
+    </div>
+    <div class="cd"><div class="ct">This Week's Goals</div>
+      <div class="fg"><label class="fl">Primary Goal</label><textarea class="ft" id="fPG" placeholder="Main goal for this week…"></textarea></div>
+      <div class="fg"><label class="fl">Secondary Goal</label><textarea class="ft" id="fSG" placeholder="Secondary goal…"></textarea></div>
+    </div>
+    <div style="margin-top:16px;display:flex;justify-content:space-between"><button class="bt bg_" onclick="pS()">← Back</button><button class="bt bp" onclick="nS()">Next →</button></div>
+  </div>
+
+  <!-- S2: COSTS -->
+  <div class="rs" id="s2">
+    <div class="cd"><div class="ct">Maintenance Costs</div><div id="mC"></div><button class="bt bg_ bsm" onclick="aC('m')" style="margin-top:8px">+ Add Cost</button><div class="csm"><span class="cl">Total Maintenance</span><span class="ca" id="mT">£0.00</span></div></div>
+    <div class="cd"><div class="ct">Operational Costs</div><div id="oC"></div><button class="bt bg_ bsm" onclick="aC('o')" style="margin-top:8px">+ Add Cost</button><div class="csm"><span class="cl">Total Operational</span><span class="ca" id="oT">£0.00</span></div></div>
+    <div style="margin-top:16px;display:flex;justify-content:space-between"><button class="bt bg_" onclick="pS()">← Back</button><button class="bt bp" onclick="nS()">Next →</button></div>
+  </div>
+
+  <!-- S3: TENANT -->
+  <div class="rs" id="s3">
+    <div class="cd"><div class="ct">Tenant Pulse</div>
+      <div class="sw"><div class="sw-h"><label class="fl" style="margin:0">Complaints</label><span class="sw-v" id="vCo">0</span></div><input type="range" min="0" max="20" value="0" id="rCo" oninput="uSl(this,'vCo')"></div>
+      <div class="fg"><label class="fl">Complaints Summary</label><textarea class="ft" id="fCS" placeholder="Brief summary…"></textarea></div>
+      <div class="sw"><div class="sw-h"><label class="fl" style="margin:0">Compliments</label><span class="sw-v" id="vCl">0</span></div><input type="range" min="0" max="20" value="0" id="rCl" oninput="uSl(this,'vCl')"></div>
+      <div class="fr">
+        <div class="sw"><div class="sw-h"><label class="fl" style="margin:0">Inspections Done</label><span class="sw-v" id="vID">0</span></div><input type="range" min="0" max="30" value="0" id="rID" oninput="uSl(this,'vID')"></div>
+        <div class="sw"><div class="sw-h"><label class="fl" style="margin:0">Inspections Scheduled</label><span class="sw-v" id="vIS">0</span></div><input type="range" min="0" max="30" value="0" id="rIS" oninput="uSl(this,'vIS')"></div>
+      </div>
+      <div class="tgr"><label for="tSf">Safeguarding or welfare concerns?</label><div class="tg"><input type="checkbox" id="tSf" onchange="E('sfD').style.display=this.checked?'block':'none'"><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <textarea class="ft" id="sfD" placeholder="Detail the concern…" style="display:none;margin-top:8px"></textarea>
+    </div>
+    <div style="margin-top:16px;display:flex;justify-content:space-between"><button class="bt bg_" onclick="pS()">← Back</button><button class="bt bp" onclick="nS()">Next →</button></div>
+  </div>
+
+  <!-- S4: COMPLIANCE -->
+  <div class="rs" id="s4">
+    <div class="cd"><div class="ct">Compliance Checklist</div>
+      <p style="color:var(--t3);font-size:11px;margin-bottom:12px">Toggle OFF anything not currently compliant</p>
+      <div class="tgr"><label for="cG">Gas safety certificates</label><div class="tg"><input type="checkbox" id="cG" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cEl">Electrical certificates</label><div class="tg"><input type="checkbox" id="cEl" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cEp">EPC ratings compliant</label><div class="tg"><input type="checkbox" id="cEp" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cSm">Smoke/CO detectors tested</label><div class="tg"><input type="checkbox" id="cSm" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cHm">HMO licence conditions</label><div class="tg"><input type="checkbox" id="cHm" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cIn">Insurance policies current</label><div class="tg"><input type="checkbox" id="cIn" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cDe">Deposit protection confirmed</label><div class="tg"><input type="checkbox" id="cDe" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cRt">Right to rent checks</label><div class="tg"><input type="checkbox" id="cRt" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="fg" style="margin-top:14px"><label class="fl">Exception Details</label><textarea class="ft" id="cEx" placeholder="Detail any non-compliant items…"></textarea></div>
+    </div>
+    <div style="margin-top:16px;display:flex;justify-content:space-between"><button class="bt bg_" onclick="pS()">← Back</button><button class="bt bp" onclick="nS()">Next →</button></div>
+  </div>
+
+  <!-- S5: ISSUES -->
+  <div class="rs" id="s5">
+    <div class="cd"><div class="ct">Possible Future Issues</div><textarea class="ft" id="fIs" placeholder="Flag upcoming risks or items needing attention…" style="min-height:90px"></textarea></div>
+    <div class="cd"><div class="ct">Any Other Business</div><textarea class="ft" id="fAo" placeholder="Market observations, contractor notes, opportunities…" style="min-height:90px"></textarea></div>
+    <div class="mw" id="mW" style="display:none"><div class="ct" style="color:var(--pu)">Monthly Reporting</div>
+      <div class="fg"><label class="fl">Monthly P&amp;L Summary</label><textarea class="ft" id="fmP" placeholder="Income vs costs overview…"></textarea></div>
+      <div class="fg"><label class="fl">Occupancy Trends</label><textarea class="ft" id="fmO" placeholder="Occupancy patterns, voids, viewings…"></textarea></div>
+      <div class="fg"><label class="fl">3-Month Forward Look</label><textarea class="ft" id="fmF" placeholder="What to expect and prepare for…"></textarea></div>
+    </div>
+    <div style="margin-top:16px;display:flex;justify-content:space-between"><button class="bt bg_" onclick="pS()">← Back</button><button class="bt bp" onclick="nS()">Review →</button></div>
+  </div>
+
+  <!-- S6: REVIEW -->
+  <div class="rs" id="s6">
+    <div class="cd"><div class="ct">Review &amp; Submit</div><div id="revB"></div></div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="bt bg_" onclick="pS()">← Back</button>
+      <button class="bt bp blg" onclick="doSubmit()" id="subBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg>Submit &amp; Generate AI Report</button>
+    </div>
+    <div id="resB" style="display:none;margin-top:20px">
+      <div class="cd"><div class="aic">✨ AI Generated</div><div class="aib" id="aiR"></div></div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+        <button class="bt bg_" onclick="dlP()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Download PDF</button>
+        <button class="bt bsu" onclick="go('dashboard')">Back to Dashboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="pg" id="pg-history">
+  <div class="ph"><h1>Report History</h1><p>View and export past reports</p></div>
+  <div id="hB"><p style="color:var(--t3)">Loading…</p></div>
+</div>
+
+<!-- REPORT VIEW -->
+<div class="pg" id="pg-view">
+  <div class="ph" style="display:flex;align-items:center;gap:12px">
+    <button class="bt bg_ bic" onclick="go('history')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div><h1 id="vT">Report</h1><p id="vSu"></p></div>
+  </div>
+  <div id="vB"></div>
+</div>
+
+<!-- TEAM -->
+<div class="pg" id="pg-team">
+  <div class="ph"><h1>Team</h1><p>Property management team</p></div>
+  <div class="tgd">
+    <div class="tc"><div class="tc-h"><div class="tc-a" style="background:linear-gradient(135deg,#63B3FF,#A78BFA)">A</div><div class="tc-i"><strong>Andy</strong><span>andy@psb.properties</span></div></div><button class="bt bg_ bsm" onclick="sU('Andy','andy@psb.properties')">Set as Current User</button></div>
+    <div class="tc"><div class="tc-h"><div class="tc-a" style="background:linear-gradient(135deg,#34D399,#63B3FF)">A</div><div class="tc-i"><strong>Akiel</strong><span>akiel@psb.properties</span></div></div><button class="bt bg_ bsm" onclick="sU('Akiel','akiel@psb.properties')">Set as Current User</button></div>
+    <div class="tc"><div class="tc-h"><div class="tc-a" style="background:linear-gradient(135deg,#FBBF24,#F87171)">H</div><div class="tc-i"><strong>Hannah</strong><span>hannah.winn@psb.properties</span></div></div><button class="bt bg_ bsm" onclick="sU('Hannah','hannah.winn@psb.properties')">Set as Current User</button></div>
+  </div>
+</div>
+
+</div></div><!-- /mc /app -->
+
+<script>
+const E=id=>document.getElementById(id);
+const API='';
+const P52=['The Villiers','The Barrington','The Egerton','The Wolsey','The Tunstall','The Montague','The Morton','The Gray','The Langley','The Kirkham','The Fordham','The Talbot Penthouse','Communal Areas'];
+const PFF=['33 Old Elvet','Claypath House Flat 1','Claypath House Flat 2','Claypath House Flat 3','Claypath House Flat 4','Flass Court Lower','Flass Court 2A','Flass Court 2B','Flass House Lower','Flass House Upper','35 St Andrews Court','7 The Cathedrals'];
+let step=0,pGoals={},isMo=false,lastId=null,gS={ppA:null,psA:null},cN=0;
+
+document.addEventListener('DOMContentLoaded',()=>{
+  let u=localStorage.getItem('rU');
+  if(u){u=JSON.parse(u);shU(u.n,u.e);}
+  setFri();lPG();chkMo();lDash();
+});
+
+function setFri(){const d=new Date(),dy=d.getDay(),df=(5-dy+7)%7;const f=new Date(d);f.setDate(d.getDate()+(df===0&&dy===5?0:df));E('fWE').value=f.toISOString().split('T')[0];}
+
+async function lPG(){try{const r=await(await fetch(API+'/api/previous-goals')).json();pGoals=r;E('pPG').textContent=r.primary_goal||'No previous goal set';E('pSG').textContent=r.secondary_goal||'No previous goal set';}catch(e){E('pPG').textContent='No previous goal set';E('pSG').textContent='No previous goal set';}}
+
+async function chkMo(){try{const r=await(await fetch(API+'/api/is-month-end')).json();isMo=r.isMonthEnd;if(isMo){E('mBan').style.display='block';E('mW').style.display='block';}}catch(e){}}
+
+async function lDash(){try{const r=await(await fetch(API+'/api/dashboard')).json();E('dR').textContent=r.totalReports;E('dM').textContent='£'+(r.monthCosts.maintenance||0).toFixed(0);E('dO').textContent='£'+(r.monthCosts.operational||0).toFixed(0);if(r.latestReport){const l=r.latestReport;const sm={green:'🟢',amber:'🟡',red:'🔴'};E('dS').innerHTML=(sm[l.status_52]||'')+(sm[l.status_ffr]||'')+(sm[l.status_cash]||'');E('dL').innerHTML='<strong style="color:var(--t1)">Week ending '+l.week_ending+'</strong> — by '+l.submitted_by+'<br><span style="font-size:12px;color:var(--t3)">'+(l.is_monthly?'Monthly | ':'')+'Goal: '+(l.primary_goal||'Not set')+'</span>';}}catch(e){}}
+
+// NAV
+function go(pg){document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));const t=E('pg-'+pg);if(t)t.classList.add('on');document.querySelectorAll('.nb,.mb').forEach(b=>b.classList.remove('on'));document.querySelectorAll('[data-p="'+pg+'"]').forEach(b=>b.classList.add('on'));if(pg==='history')lHist();if(pg==='dashboard')lDash();csb();window.scrollTo(0,0);}
+function tsb(){E('sb').classList.toggle('op');E('mov').classList.toggle('sh');}
+function csb(){E('sb').classList.remove('op');E('mov').classList.remove('sh');}
+
+// USER
+function sU(n,e){localStorage.setItem('rU',JSON.stringify({n,e}));shU(n,e);E('fWho').value=n;toast('Switched to '+n);}
+function shU(n,e){E('uN').textContent=n;E('uE').textContent=e;E('uA').textContent=n[0];E('fWho').value=n;}
+
+// STEPS
+function toS(s){if(s===6)bRev();step=s;document.querySelectorAll('.rs').forEach(r=>r.classList.remove('on'));E('s'+s).classList.add('on');document.querySelectorAll('.stp').forEach((p,i)=>{p.classList.remove('a','d');if(i===s)p.classList.add('a');else if(i<s)p.classList.add('d');});window.scrollTo(0,0);}
+function nS(){toS(Math.min(step+1,6));}
+function pS(){toS(Math.max(step-1,0));}
+
+// TRAFFIC
+function pT(b){b.closest('.tr').querySelectorAll('.to').forEach(x=>x.classList.remove('s'));b.classList.add('s');}
+function gT(f){const s=document.querySelector('.tr[data-f="'+f+'"] .s');return s?s.dataset.v:'green';}
+
+// GOALS
+function pG(b,f,v){b.closest('.gbs').querySelectorAll('.gb').forEach(x=>x.classList.remove('s'));b.classList.add('s');gS[f]=v;}
+
+// SLIDERS
+function uSl(el,vid){E(vid).textContent=el.value;const p=(el.value-el.min)/(el.max-el.min)*100;el.style.background='linear-gradient(90deg,var(--ac) '+p+'%,var(--gl3) '+p+'%)';}
+
+// COSTS
+function aC(t){cN++;const id='c'+cN;const box=E(t==='m'?'mC':'oC');const opts='<optgroup label="52 Old Elvet">'+P52.map(p=>'<option>'+p+'</option>').join('')+'</optgroup><optgroup label="FFR Group">'+PFF.map(p=>'<option>'+p+'</option>').join('')+'</optgroup>';
+const d=document.createElement('div');d.className='cro';d.id=id;d.innerHTML='<input type="date" class="fi" data-k="date" value="'+new Date().toISOString().split('T')[0]+'"><select class="fs" data-k="prop"><option value="">Property</option>'+opts+'</select><input type="text" class="fi" data-k="desc" placeholder="Description"><input type="number" class="fi" data-k="amt" placeholder="£" step="0.01" min="0" oninput="cTot()"><button class="bt bda bic bsm" onclick="this.closest(\'.cro\').remove();cTot()">✕</button>';box.appendChild(d);}
+function cTot(){['m','o'].forEach(t=>{const rows=document.querySelectorAll('#'+(t==='m'?'mC':'oC')+' .cro');let tot=0;rows.forEach(r=>{tot+=parseFloat(r.querySelector('[data-k="amt"]')?.value||0);});E(t+'T').textContent='£'+tot.toFixed(2);});}
+function gCo(t){const rows=document.querySelectorAll('#'+(t==='m'?'mC':'oC')+' .cro');return Array.from(rows).map(r=>{const pr=r.querySelector('[data-k="prop"]')?.value||'';return{category:t==='m'?'maintenance':'operational',date:r.querySelector('[data-k="date"]')?.value||'',property:pr,description:r.querySelector('[data-k="desc"]')?.value||'',contractor_supplier:'',amount:parseFloat(r.querySelector('[data-k="amt"]')?.value||0),portfolio:P52.includes(pr)?'52_old_elvet':'ffr_group'};});}
+
+// REVIEW
+function bRev(){const se={green:'🟢',amber:'🟡',red:'🔴'};const mc=gCo('m'),oc=gCo('o');const tm=mc.reduce((s,c)=>s+c.amount,0),to_=oc.reduce((s,c)=>s+c.amount,0);
+let h='<div style="display:flex;gap:10px;margin-bottom:18px">';
+[['52 Old Elvet','status_52'],['FFR Group','status_ffr'],['Cash','status_cash']].forEach(([l,f])=>{h+='<div style="flex:1;padding:12px;border-radius:10px;background:var(--gl);text-align:center;border:1px solid var(--bd)"><div style="font-size:10px;color:var(--t3);margin-bottom:4px">'+l+'</div><div style="font-size:22px">'+se[gT(f)]+'</div></div>';});
+h+='</div><div class="dv"></div>';
+h+='<div style="font:700 11px/1 var(--f);color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Goals</div>';
+h+='<p style="font-size:13px;margin-bottom:4px"><strong>Last Primary:</strong> '+(pGoals.primary_goal||'N/A')+' '+(gS.ppA===true?'✅':gS.ppA===false?'❌':'—')+'</p>';
+h+='<p style="font-size:13px;margin-bottom:4px"><strong>Last Secondary:</strong> '+(pGoals.secondary_goal||'N/A')+' '+(gS.psA===true?'✅':gS.psA===false?'❌':'—')+'</p>';
+h+='<p style="font-size:13px;margin-bottom:4px"><strong>This Week Primary:</strong> '+(E('fPG').value||'Not set')+'</p>';
+h+='<p style="font-size:13px;margin-bottom:12px"><strong>This Week Secondary:</strong> '+(E('fSG').value||'Not set')+'</p>';
+h+='<div class="dv"></div><div style="font:700 11px/1 var(--f);color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px">Costs</div>';
+h+='<div style="display:flex;gap:10px;margin-bottom:12px"><div style="flex:1;padding:14px;border-radius:10px;background:var(--acd);border:1px solid rgba(99,179,255,.12)"><div style="font-size:10px;color:var(--t3)">Maintenance</div><div style="font:700 20px/1 var(--m);color:var(--ac);margin-top:4px">£'+tm.toFixed(2)+'</div><div style="font-size:10px;color:var(--t3);margin-top:2px">'+mc.length+' items</div></div>';
+h+='<div style="flex:1;padding:14px;border-radius:10px;background:var(--pud);border:1px solid rgba(167,139,250,.12)"><div style="font-size:10px;color:var(--t3)">Operational</div><div style="font:700 20px/1 var(--m);color:var(--pu);margin-top:4px">£'+to_.toFixed(2)+'</div><div style="font-size:10px;color:var(--t3);margin-top:2px">'+oc.length+' items</div></div></div>';
+const allC=[...mc,...oc];
+if(allC.length){h+='<div style="overflow-x:auto"><table style="width:100%;font-size:11.5px;border-collapse:collapse"><tr style="border-bottom:1px solid var(--bd)"><td style="padding:5px 6px;color:var(--t3);font-weight:600">Type</td><td style="padding:5px 6px;color:var(--t3);font-weight:600">Date</td><td style="padding:5px 6px;color:var(--t3);font-weight:600">Property</td><td style="padding:5px 6px;color:var(--t3);font-weight:600">Description</td><td style="padding:5px 6px;color:var(--t3);font-weight:600;text-align:right">Amount</td></tr>';allC.forEach(c=>{h+='<tr style="border-bottom:1px solid var(--bd)"><td style="padding:5px 6px"><span style="padding:2px 7px;border-radius:3px;font-size:9.5px;font-weight:600;'+(c.category==='maintenance'?'background:var(--acd);color:var(--ac)':'background:var(--pud);color:var(--pu)')+'">'+(c.category==='maintenance'?'MAINT':'OPS')+'</span></td><td style="padding:5px 6px">'+c.date+'</td><td style="padding:5px 6px">'+(c.property||'—')+'</td><td style="padding:5px 6px">'+c.description+'</td><td style="padding:5px 6px;text-align:right;font-weight:600">£'+c.amount.toFixed(2)+'</td></tr>';});h+='</table></div>';}
+h+='<div class="dv"></div><p style="font-size:11px;color:var(--t3)">Submitting will generate an AI summary, create a PDF, and email to fergus@psb.properties</p>';
+E('revB').innerHTML=h;}
+
+// SUBMIT
+async function doSubmit(){const we=E('fWE').value,who=E('fWho').value;if(!we||!who){toast('Please set date and select your name',1);return;}
+const pl={week_ending:we,submitted_by:who,is_monthly:isMo,status_52:gT('status_52'),status_ffr:gT('status_ffr'),status_cash:gT('status_cash'),primary_goal:E('fPG').value,secondary_goal:E('fSG').value,prev_primary_goal:pGoals.primary_goal||null,prev_primary_achieved:gS.ppA===true,prev_primary_note:E('ppN').value||null,prev_secondary_goal:pGoals.secondary_goal||null,prev_secondary_achieved:gS.psA===true,prev_secondary_note:E('psN').value||null,tenant_complaints:+E('rCo').value,tenant_complaints_summary:E('fCS').value||null,tenant_compliments:+E('rCl').value,inspections_done:+E('rID').value,inspections_scheduled:+E('rIS').value,safeguarding_concerns:E('tSf').checked,safeguarding_detail:E('sfD').value||null,compliance_gas:E('cG').checked,compliance_electrical:E('cEl').checked,compliance_epc:E('cEp').checked,compliance_smoke_co:E('cSm').checked,compliance_hmo:E('cHm').checked,compliance_insurance:E('cIn').checked,compliance_deposit:E('cDe').checked,compliance_right_to_rent:E('cRt').checked,compliance_exceptions:E('cEx').value||null,future_issues:E('fIs').value||null,aob:E('fAo').value||null,costs:[...gCo('m'),...gCo('o')],issues:[],arrears:[],occupancy:[],income:[]};
+if(isMo){pl.monthly_pnl_summary=E('fmP').value||null;pl.monthly_occupancy_trends=E('fmO').value||null;pl.monthly_forward_look=E('fmF').value||null;}
+sLd('Submitting report & generating AI summary…');
+try{const r=await(await fetch(API+'/api/reports',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pl)})).json();hLd();if(r.success){lastId=r.reportId;E('aiR').textContent=r.aiSummary||'AI summary in progress…';E('resB').style.display='block';E('subBtn').style.display='none';toast(r.emailSent?'Report submitted & emailed ✅':'Report submitted (configure SMTP for email)');}else toast('Error: '+(r.error||'Unknown'),1);}catch(e){hLd();toast('Network error: '+e.message,1);}}
+
+// HISTORY
+async function lHist(){try{const rpts=await(await fetch(API+'/api/reports')).json();const box=E('hB');if(!rpts.length){box.innerHTML='<p style="color:var(--t3)">No reports yet.</p>';return;}
+box.innerHTML=rpts.map(r=>{const sd=s=>'<div class="sd_ '+s+'"></div>';return '<div class="rca" onclick="vRpt(\''+r.id+'\')"><div class="rca-t"><span class="rca-d">Week ending '+r.week_ending+'</span><span class="rb_ '+(r.is_monthly?'m':'w')+'">'+(r.is_monthly?'Monthly':'Weekly')+'</span></div><div class="rca-m"><span>By '+r.submitted_by+'</span><span>'+new Date(r.submitted_at).toLocaleDateString('en-GB')+'</span></div><div class="sds">'+sd(r.status_52)+sd(r.status_ffr)+sd(r.status_cash)+'</div><div style="display:flex;gap:8px;margin-top:12px"><button class="bt bg_ bsm" onclick="event.stopPropagation();window.open(API+\'/api/reports/'+r.id+'/pdf\')">PDF</button><button class="bt bg_ bsm" onclick="event.stopPropagation();vRpt(\''+r.id+'\')">View</button></div></div>';}).join('');}catch(e){E('hB').innerHTML='<p style="color:var(--rd)">Failed to load.</p>';}}
+
+async function vRpt(id){sLd('Loading…');try{const d=await(await fetch(API+'/api/reports/'+id)).json();hLd();const r=d.report,costs=d.costs||[];const se={green:'🟢',amber:'🟡',red:'🔴'};
+E('vT').textContent='Report — '+r.week_ending;E('vSu').textContent='By '+r.submitted_by+' on '+new Date(r.submitted_at).toLocaleDateString('en-GB');
+const mc=costs.filter(c=>c.category==='maintenance'),oc=costs.filter(c=>c.category==='operational');const tm=mc.reduce((s,c)=>s+(c.amount||0),0),to_=oc.reduce((s,c)=>s+(c.amount||0),0);
+let h='<div class="cd" style="margin-bottom:14px"><div class="ct">Status</div><div style="display:flex;gap:14px">';
+[['52 Old Elvet',r.status_52],['FFR Group',r.status_ffr],['Cash',r.status_cash]].forEach(([l,s])=>{h+='<div>'+(se[s]||'⚪')+' '+l+'</div>';});h+='</div></div>';
+h+='<div class="cd" style="margin-bottom:14px"><div class="ct">Goals</div>';
+if(r.prev_primary_goal)h+='<p style="font-size:13px;margin-bottom:4px"><strong>Last Primary:</strong> '+r.prev_primary_goal+' '+(r.prev_primary_achieved?'✅':'❌')+'</p>';
+if(r.prev_secondary_goal)h+='<p style="font-size:13px;margin-bottom:8px"><strong>Last Secondary:</strong> '+r.prev_secondary_goal+' '+(r.prev_secondary_achieved?'✅':'❌')+'</p>';
+h+='<div class="dv"></div><p style="font-size:13px;margin-bottom:4px"><strong>This Week Primary:</strong> '+(r.primary_goal||'—')+'</p><p style="font-size:13px"><strong>This Week Secondary:</strong> '+(r.secondary_goal||'—')+'</p></div>';
+h+='<div class="cd" style="margin-bottom:14px"><div class="ct">Costs — £'+(tm+to_).toFixed(2)+'</div><div style="display:flex;gap:10px;margin-bottom:14px"><div style="flex:1;padding:12px;border-radius:10px;background:var(--acd)"><div style="font-size:10px;color:var(--t3)">Maintenance</div><div style="font:700 18px/1 var(--m);color:var(--ac)">£'+tm.toFixed(2)+'</div></div><div style="flex:1;padding:12px;border-radius:10px;background:var(--pud)"><div style="font-size:10px;color:var(--t3)">Operational</div><div style="font:700 18px/1 var(--m);color:var(--pu)">£'+to_.toFixed(2)+'</div></div></div>';
+if(costs.length){h+='<div style="overflow-x:auto"><table style="width:100%;font-size:11.5px;border-collapse:collapse"><tr style="border-bottom:1px solid var(--bd)"><td style="padding:5px 6px;color:var(--t3);font-weight:600">Type</td><td style="padding:5px 6px;color:var(--t3);font-weight:600">Date</td><td style="padding:5px 6px;color:var(--t3);font-weight:600">Property</td><td style="padding:5px 6px;color:var(--t3);font-weight:600">Description</td><td style="padding:5px 6px;color:var(--t3);font-weight:600;text-align:right">Amount</td></tr>';costs.forEach(c=>{h+='<tr style="border-bottom:1px solid var(--bd)"><td style="padding:5px 6px"><span style="padding:2px 7px;border-radius:3px;font-size:9px;font-weight:600;'+(c.category==='maintenance'?'background:var(--acd);color:var(--ac)':'background:var(--pud);color:var(--pu)')+'">'+(c.category==='maintenance'?'MAINT':'OPS')+'</span></td><td style="padding:5px 6px">'+(c.date||'—')+'</td><td style="padding:5px 6px">'+(c.property||'—')+'</td><td style="padding:5px 6px">'+c.description+'</td><td style="padding:5px 6px;text-align:right;font-weight:600">£'+(c.amount||0).toFixed(2)+'</td></tr>';});h+='</table></div>';}
+h+='</div>';
+if(r.ai_summary)h+='<div class="cd" style="margin-bottom:14px"><div class="aic">✨ AI Summary</div><div class="aib">'+r.ai_summary+'</div></div>';
+h+='<div style="display:flex;gap:10px;margin-top:14px"><button class="bt bg_" onclick="window.open(API+\'/api/reports/'+id+'/pdf\')">Download PDF</button><button class="bt bp" onclick="rgAI(\''+id+'\')">✨ Regenerate AI</button></div>';
+E('vB').innerHTML=h;go('view');}catch(e){hLd();toast('Error: '+e.message,1);}}
+
+async function rgAI(id){sLd('Regenerating…');try{await fetch(API+'/api/reports/'+id+'/generate-ai',{method:'POST'});hLd();toast('Done!');vRpt(id);}catch(e){hLd();toast('Error',1);}}
+
+function dlP(){if(lastId)window.open(API+'/api/reports/'+lastId+'/pdf');}
+
+// UTILS
+function sLd(t){E('loT').textContent=t||'Loading…';E('lo').classList.remove('off');}
+function hLd(){E('lo').classList.add('off');}
+let tT;function toast(m,err){const t=E('tst');t.textContent=m;t.className='tst '+(err?'er':'ok')+' vi';clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('vi'),4000);}
+</script>
+</body>
+</html>
