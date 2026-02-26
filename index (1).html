@@ -326,7 +326,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:10px;ba
         <div class="sw"><div class="sw-h"><label class="fl" style="margin:0">Inspections Done</label><span class="sw-v" id="vID">0</span></div><input type="range" min="0" max="30" value="0" id="rID" oninput="uSl(this,'vID')"></div>
         <div class="sw"><div class="sw-h"><label class="fl" style="margin:0">Inspections Scheduled</label><span class="sw-v" id="vIS">0</span></div><input type="range" min="0" max="30" value="0" id="rIS" oninput="uSl(this,'vIS')"></div>
       </div>
-      <div class="tgr"><label for="tSf">Safeguarding or welfare concerns?</label><div class="tg"><input type="checkbox" id="tSf" onchange="E('sfD').style.display=this.checked?'block':'none'"><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="tSf">Safeguarding or welfare concerns?</label><div class="tg"><input type="checkbox" id="tSf" onchange="E('sfD').style.display=this.checked?'block':'none'"><label class="tg-t" for="tSf"></label><span class="tg-k"></span></div></div>
       <textarea class="ft" id="sfD" placeholder="Detail the concern…" style="display:none;margin-top:8px"></textarea>
     </div>
     <div style="margin-top:16px;display:flex;justify-content:space-between"><button class="bt bg_" onclick="pS()">← Back</button><button class="bt bp" onclick="nS()">Next →</button></div>
@@ -336,14 +336,14 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:10px;ba
   <div class="rs" id="s4">
     <div class="cd"><div class="ct">Compliance Checklist</div>
       <p style="color:var(--t3);font-size:11px;margin-bottom:12px">Toggle OFF anything not currently compliant</p>
-      <div class="tgr"><label for="cG">Gas safety certificates</label><div class="tg"><input type="checkbox" id="cG" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
-      <div class="tgr"><label for="cEl">Electrical certificates</label><div class="tg"><input type="checkbox" id="cEl" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
-      <div class="tgr"><label for="cEp">EPC ratings compliant</label><div class="tg"><input type="checkbox" id="cEp" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
-      <div class="tgr"><label for="cSm">Smoke/CO detectors tested</label><div class="tg"><input type="checkbox" id="cSm" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
-      <div class="tgr"><label for="cHm">HMO licence conditions</label><div class="tg"><input type="checkbox" id="cHm" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
-      <div class="tgr"><label for="cIn">Insurance policies current</label><div class="tg"><input type="checkbox" id="cIn" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
-      <div class="tgr"><label for="cDe">Deposit protection confirmed</label><div class="tg"><input type="checkbox" id="cDe" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
-      <div class="tgr"><label for="cRt">Right to rent checks</label><div class="tg"><input type="checkbox" id="cRt" checked><span class="tg-t"></span><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cG">Gas safety certificates</label><div class="tg"><input type="checkbox" id="cG" checked><label class="tg-t" for="cG"></label><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cEl">Electrical certificates</label><div class="tg"><input type="checkbox" id="cEl" checked><label class="tg-t" for="cEl"></label><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cEp">EPC ratings compliant</label><div class="tg"><input type="checkbox" id="cEp" checked><label class="tg-t" for="cEp"></label><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cSm">Smoke/CO detectors tested</label><div class="tg"><input type="checkbox" id="cSm" checked><label class="tg-t" for="cSm"></label><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cHm">HMO licence conditions</label><div class="tg"><input type="checkbox" id="cHm" checked><label class="tg-t" for="cHm"></label><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cIn">Insurance policies current</label><div class="tg"><input type="checkbox" id="cIn" checked><label class="tg-t" for="cIn"></label><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cDe">Deposit protection confirmed</label><div class="tg"><input type="checkbox" id="cDe" checked><label class="tg-t" for="cDe"></label><span class="tg-k"></span></div></div>
+      <div class="tgr"><label for="cRt">Right to rent checks</label><div class="tg"><input type="checkbox" id="cRt" checked><label class="tg-t" for="cRt"></label><span class="tg-k"></span></div></div>
       <div class="fg" style="margin-top:14px"><label class="fl">Exception Details</label><textarea class="ft" id="cEx" placeholder="Detail any non-compliant items…"></textarea></div>
     </div>
     <div style="margin-top:16px;display:flex;justify-content:space-between"><button class="bt bg_" onclick="pS()">← Back</button><button class="bt bp" onclick="nS()">Next →</button></div>
@@ -512,3 +512,5 @@ let tT;function toast(m,err){const t=E('tst');t.textContent=m;t.className='tst '
 </script>
 </body>
 </html>
+
+
